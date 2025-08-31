@@ -1,625 +1,297 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ProSofi — inceleme & vlog arşivi</title>
-  <meta name="description" content="ProSofi YouTube kanalındaki tüm videolar: İnceleme ve vlog. Arama, kategori ve motor hacmi filtresiyle hızlıca bul, YouTube'da izle." />
-  <link rel="icon" href="./assets/prosofi-logo.png" />
-  <style>
-:root{
-  /* Süper sport motosiklet teması - Racing renkler */
-  --bg: linear-gradient(135deg, #0a0d14 0%, #1a1f2e 25%, #0f1419 50%, #141a26 75%, #0a0e16 100%);
-  --panel: linear-gradient(145deg, #1c2330, #252d3e);
-  --muted: #94a6c2; 
-  --text: #e8f4ff; 
-  --accent: #00ff88; /* Racing green */
-  --accent-2: #ff3366; /* Racing red */
-  --danger: #ff4466;
-  
-  /* Motosiklet temalı renkler */
-  --racing-yellow: #ffcc00;
-  --racing-blue: #0066ff;
-  --carbon: #1a1d24;
-  --chrome: linear-gradient(135deg, #c0c8d0, #e8eef5, #b8c2ce);
-  
-  --chip: linear-gradient(135deg, #1f2633, #2a3142);
-  --chip-b: #3d4a5c;
-  --card: linear-gradient(145deg, #141922, #1a2030);
-  --border: #2f3847;
+/* ========= ProSofi (static site) – Racing Theme Styles ========= */
+/* Bu dosyayı assets/styles.css olarak kaydet. HTML sınıf isimleri
+   mevcut projeye (index.html + scripts/app.js) uygun tutuldu. */
 
-  /* Gelişmiş select/dropdown */
-  --select-bg: linear-gradient(145deg, #1a2330, #252d3e);
-  --select-text: #e8f4ff;
-  --select-border: #3d4a5c;
-  --select-hover: linear-gradient(145deg, #242d3c, #2a3445);
-  --select-active: linear-gradient(145deg, #2a3445, #303948);
-  --menu-bg: #1a2330;
-  --menu-border: #3d4a5c;
+/* ---------- Palette ---------- */
+:root {
+  /* Arkaplan ve yüzeyler */
+  --bg-primary: #0a0d14;
+  --bg-secondary: #111623;
+  --panel: #151c2a;
+  --card: #101724;
+  --border: #263146;
+
+  /* Metin */
+  --text-primary: #ffffff;
+  --text: #e9f3ff;
+  --muted: #97a9c5;
+
+  /* Aksesuar renkler (racing) */
+  --acc-green: #006eff;
+  --acc-red: #ff3366;
+  --acc-yellow: #ffcc00;
+  --acc-blue: #2aa9ff;
+  --acc-purple: #8b5cf6;
+
+  /* Select/dropdown özel palette (daha canlı) */
+  --select-bg: #162031;
+  --select-border: #2b3a52;
+  --select-hover: #1c2840;
+  --select-active: #1b314a;
+
+  /* Çip/pil tarzı yüzeyler */
+  --chip: #1b2233;
+  --chip-b: #2a3a52;
+
+  /* Gölge ve parlama */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.15);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.3);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.42);
+  --glow-green: 0 0 18px rgb(97, 0, 0);
+  --glow-red: 0 0 18px rgba(255,51,102,.32);
 }
 
-* { box-sizing: border-box; }
-html, body { height: 100%; }
-
-body {
+/* ---------- Reset ---------- */
+* { box-sizing: border-box }
+html, body { height: 100% }
+body{
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Ubuntu, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
   color: var(--text);
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(0,255,136,.05) 0%, transparent 60%),
+    radial-gradient(circle at 88% 78%, rgba(255,51,102,.05) 0%, transparent 60%),
+    linear-gradient(180deg,#0a0d14, #0b1020 35%, #0a1122 100%);
   background-attachment: fixed;
-  position: relative;
+  overflow-x: hidden;
 }
 
-/* Racing grid pattern overlay */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(255, 51, 102, 0.03) 0%, transparent 50%);
+/* İnce grid efekti */
+body::after{
+  content:"";
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size: 50px 50px;
   pointer-events: none;
+  animation: gridMove 22s linear infinite;
   z-index: -1;
 }
+@keyframes gridMove { to{ transform: translate(50px,50px) } }
 
-a { color: var(--accent-2); text-decoration: none; transition: all 0.2s ease; }
-a:hover { opacity: 0.9; text-decoration: underline; }
+a{ color: var(--acc-red); text-decoration: none; transition: .25s ease }
+a:hover{ color: var(--acc-green); text-shadow: var(--glow-green) }
 
-header {
-  position: sticky;
-  top: 0;
-  backdrop-filter: saturate(180%) blur(20px);
-  background: rgba(10, 13, 20, 0.85);
+/* ---------- Header ---------- */
+header{
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: saturate(170%) blur(16px);
+  background: rgba(10,13,20,.88);
   border-bottom: 2px solid transparent;
-  border-image: linear-gradient(90deg, var(--accent), var(--accent-2), var(--racing-yellow)) 1;
-  z-index: 100;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-image: linear-gradient(90deg, var(--acc-green), var(--acc-yellow), var(--acc-red), var(--acc-blue)) 1;
+  box-shadow: var(--shadow-lg);
+}
+.wrap{ max-width: 1280px; margin: 0 auto; padding: 16px 20px }
+.row{ display: flex; gap: 16px; align-items: center; flex-wrap: wrap }
+
+.brand{ display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: .3px }
+.logo-img{
+  width: 42px; height: 42px; border-radius: 12px;
+  border: 2px solid var(--select-border); background: #0c1320;
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.06);
+  object-fit: cover; transition: .35s cubic-bezier(.34,1.56,.64,1);
+  filter: drop-shadow(0 0 8px rgba(0,255,136,.35));
+  animation: pulse 3.2s ease-in-out infinite;
+}
+.logo-img:hover{ transform: scale(1.06) rotate(3deg); box-shadow: var(--shadow-lg), var(--glow-green) }
+@keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+.brand-sub{ font-size: 12px; color: var(--acc-green); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800 }
+.brand-title{
+  font-size: 20px; font-weight: 900;
+  background: linear-gradient(135deg, var(--text-primary), var(--acc-green), var(--acc-red));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 
-.wrap {
-  max-width: 1200px;
-  margin: auto;
-  padding: 16px 20px;
-}
+/* ---------- Controls ---------- */
+.controls{ display: flex; gap: 12px; align-items: center; margin-left: auto; flex-wrap: wrap }
+.controls.grow{ flex: 1 }
 
-.row {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  position: relative;
-}
-
-.logo-img {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  background: var(--carbon);
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.logo-img:hover {
-  transform: scale(1.05) rotate(2deg);
-}
-
-.brand-sub {
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.brand-title {
-  font-size: 20px;
-  background: linear-gradient(135deg, var(--text), var(--accent-2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.controls {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-left: auto;
-  flex-wrap: wrap;
-}
-
-.controls.grow {
-  flex: 1;
-}
-
-.control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.control{
+  display: flex; align-items: center; gap: 10px;
   background: var(--panel);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  padding: 12px 16px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 12px 14px;
+  position: relative; overflow: hidden;
+  transition: .35s ease; box-shadow: var(--shadow-sm);
 }
-
-.control:hover {
-  border-color: var(--accent);
-  box-shadow: 0 6px 20px rgba(0, 255, 136, 0.15);
+.control::before{
+  content:""; position:absolute; inset:0; left:-100%;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,.12), transparent);
+  transition: left .6s ease;
 }
+.control:hover{ border-color: var(--acc-green); box-shadow: var(--shadow-md), var(--glow-green); transform: translateY(-1px) }
+.control:hover::before{ left:100% }
+.control:focus-within{ border-color: var(--acc-red); box-shadow: var(--shadow-md), var(--glow-red) }
 
-.control:focus-within {
-  border-color: var(--accent-2);
-  box-shadow: 0 6px 20px rgba(255, 51, 102, 0.2);
+.control input, .control select{
+  flex: 1; background: transparent; border: 0; outline: none;
+  color: var(--text); font-size: 15px; font-weight: 600;
 }
+.control svg{ fill: var(--acc-green); transition: .25s ease; filter: drop-shadow(0 0 4px rgba(0,255,136,.3)) }
+.control:hover svg{ fill: var(--acc-red); filter: drop-shadow(0 0 6px rgba(255,51,102,.45)) }
+.control.search{ flex: 1; min-width: 300px }
+.control input::placeholder{ color: #bcd2ff; opacity:.9; font-weight: 500 }
 
-.control input, .control select {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.control svg {
-  fill: var(--accent);
-  transition: fill 0.2s ease;
-}
-
-.control:hover svg {
-  fill: var(--accent-2);
-}
-
-.control.search {
-  flex: 1;
-  min-width: 280px;
-}
-
-/* Gelişmiş Select Tasarımı */
-.control select {
-  appearance: none;
-  background: var(--select-bg);
-  color: var(--select-text);
-  border: 2px solid var(--select-border);
+/* Select – canlı tema */
+.control select{
+  appearance: none; cursor: pointer;
+  background: linear-gradient(145deg, #1a2332, #222c42);
+  border: 1.5px solid var(--select-border);
   border-radius: 12px;
-  padding: 10px 40px 10px 12px;
-  font-weight: 700;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.3) inset,
-    0 2px 0 rgba(255, 255, 255, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  background-image: 
-    linear-gradient(45deg, transparent 50%, var(--accent) 50%),
-    linear-gradient(135deg, transparent 50%, var(--accent) 50%);
-  background-position: 
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px);
-  background-size: 5px 5px, 5px 5px;
+  padding: 10px 40px 10px 12px; font-weight: 800; color: var(--text);
+  box-shadow: inset 0 3px 12px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.05);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--acc-green) 50%),
+    linear-gradient(135deg, transparent 50%, var(--acc-green) 50%);
+  background-position:
+    calc(100% - 22px) calc(1em + 2px),
+    calc(100% - 16px) calc(1em + 2px);
+  background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
 }
+.control select:hover{ background: linear-gradient(145deg,#22304a,#293b58); border-color: var(--acc-green); transform: translateY(-1px) scale(1.01); box-shadow: var(--shadow-md), var(--glow-green) }
+.control select:focus-visible{ outline: none; border-color: var(--acc-red); box-shadow: 0 0 0 4px rgba(255,51,102,.2), var(--shadow-lg) }
+.control select option{ background: #0f1726; color: #e9f4ff; font-weight: 700 }
 
-.control select:hover {
-  background: var(--select-hover);
-  border-color: var(--accent);
-  transform: translateY(-1px);
+/* Sayaç rozet */
+.badge{
+  font-size: 12px; font-weight: 900; letter-spacing:.4px; text-transform: uppercase;
+  padding: 8px 12px; border-radius: 999px;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #0e1522, #151d2d);
+  color: var(--acc-green);
 }
 
-.control select:focus-visible {
-  outline: none;
-  border-color: var(--accent-2);
-  box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2);
-}
+/* ---------- Main & Grid ---------- */
+main{ max-width: 1280px; margin: 0 auto; padding: 16px 20px 96px }
+.grid{ display: grid; grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap: 18px; margin-top: 12px }
 
-.control select option {
-  background: var(--menu-bg);
-  color: #e9f4ff;
-  font-weight: 700;
-  padding: 8px 12px;
-  border-radius: 6px;
-  margin: 2px;
-}
-
-.control select option:hover,
-.control select option:focus {
-  background: var(--select-hover);
-  color: #ffffff;
-}
-
-.control select option:checked {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  color: #ffffff;
-  font-weight: 800;
-}
-
-.control select optgroup {
-  color: var(--accent);
-  background: var(--menu-bg);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 8px 12px;
-}
-
-.badge {
-  font-size: 12px;
-  font-weight: 800;
-  padding: 8px 12px;
-  border-radius: 20px;
-  border: 2px solid var(--border);
-  background: linear-gradient(135deg, var(--carbon), #1f2633);
-  color: var(--accent);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.control input::placeholder {
-  color: var(--muted);
-  opacity: 0.8;
-  font-style: italic;
-}
-
-main {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 20px 100px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.card {
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 
-    0 12px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+/* ---------- Card ---------- */
+.card{
+  background: linear-gradient(145deg, #0f1726, #182133);
+  border: 1.5px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  transition: .4s cubic-bezier(.34,1.56,.64,1);
   position: relative;
+  animation: fadeInUp .55s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.card::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:3px; opacity:0;
+  background: linear-gradient(90deg, var(--acc-green), var(--acc-yellow), var(--acc-red), var(--acc-blue), var(--acc-purple));
+  transition: opacity .35s ease;
+}
+.card:hover{
+  transform: translateY(-10px) scale(1.02);
+  border-color: var(--acc-green);
+  box-shadow: var(--shadow-lg), 0 0 0 2px rgba(0,255,136,.25);
+}
+.card:hover::before{ opacity: 1 }
+
+.thumb{ position: relative; aspect-ratio: 16/9; overflow: hidden; background: #0c1320 }
+.thumb img{
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: contrast(1.18) saturate(1.15) brightness(1.08);
+  transition: .45s cubic-bezier(.4,0,.2,1);
+}
+.card:hover .thumb img{ transform: scale(1.12) rotate(.5deg); filter: contrast(1.24) saturate(1.25) brightness(1.12) }
+.thumb::after{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38));
+  pointer-events:none; transition: .25s ease;
+}
+.card:hover .thumb::after{ opacity:.85 }
+
+.thumb .tag{
+  position:absolute; left:12px; top:12px;
+  font-size: 12px; font-weight: 900; letter-spacing:.5px; text-transform: uppercase;
+  padding: 7px 10px; border-radius: 12px;
+  background: rgba(0,255,136,.95); color:#000; box-shadow: var(--shadow-md);
+}
+.thumb .cc{
+  position:absolute; right:12px; top:12px;
+  font-size: 12px; font-weight: 800; padding: 7px 10px; border-radius: 12px;
+  background: rgba(255,51,102,.95); color:#fff; box-shadow: var(--shadow-md);
 }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--racing-yellow), var(--accent-2));
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.body{ padding: 16px }
+.title{ margin: 0 0 10px; line-height: 1.35; font-weight: 900; color: var(--text-primary) }
+.title a{ color: var(--text-primary); position: relative; transition: .25s ease }
+.title a::after{
+  content:""; position:absolute; left:0; bottom:-2px; width:0; height:2px;
+  background: linear-gradient(90deg, var(--acc-green), var(--acc-red));
+  transition: width .25s ease;
+}
+.title a:hover{ color: var(--acc-green); text-shadow: var(--glow-green) }
+.title a:hover::after{ width: 100% }
+
+.meta{ display:flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px }
+.pill{
+  font-size: 11px; font-weight: 800; letter-spacing:.4px; text-transform: uppercase;
+  padding: 6px 10px; border-radius: 999px;
+  background: var(--chip); border: 1px solid var(--chip-b); color: var(--acc-green);
+  transition: .25s ease; box-shadow: var(--shadow-sm);
+}
+.pill:hover{ transform: scale(1.05); box-shadow: var(--shadow-md), var(--glow-green); border-color: var(--acc-green) }
+
+.specs{ margin: 0; padding-left: 18px; color: #c4d3ea }
+.specs li{ margin: 3px 0 }
+.specs li::marker{ content: "🏍️ " }
+
+/* ---------- Actions ---------- */
+.actions{
+  margin-top: auto; padding: 14px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1.5px solid var(--border);
+  background: linear-gradient(135deg, #0f141f, #131b2a);
+}
+.btn{
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1.5px solid var(--acc-green);
+  background: linear-gradient(135deg, transparent, rgba(0,255,136,.1));
+  color: var(--acc-green);
+  padding: 10px 16px; border-radius: 14px; cursor: pointer;
+  font-weight: 900; text-transform: uppercase; letter-spacing: .6px;
+  transition: .35s cubic-bezier(.34,1.56,.64,1); position: relative; overflow: hidden;
+}
+.btn:hover{
+  background: var(--acc-green); color: #000;
+  transform: translateY(-2px) scale(1.03); box-shadow: var(--shadow-md), var(--glow-green);
+}
+.yt{ display: inline-flex; align-items: center; gap: 8px; color: var(--acc-red); font-weight: 800 }
+.yt:hover{ color: var(--acc-green); text-shadow: var(--glow-green) }
+.yt svg{ width: 18px; height: 18px; fill: currentColor }
+
+/* ---------- Footer / Info ---------- */
+footer{ border-top: 2px solid var(--border); color: var(--muted); font-size: 13px; background: linear-gradient(135deg,#0a0d14,#111823); padding: 26px 0; box-shadow: var(--shadow-md) }
+.foot{ text-align: center; line-height: 1.8; max-width: 640px; margin: 0 auto }
+
+.empty{
+  padding: 28px; text-align: center; color: #b2c2df;
+  border: 2px dashed var(--border); border-radius: 16px;
+  background: rgba(20,26,40,.45); backdrop-filter: blur(6px);
 }
 
-.card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.5),
-    0 0 0 2px var(--accent);
+.banner{
+  display:none; padding: 12px 16px; text-align: center;
+  background: linear-gradient(135deg, var(--acc-yellow), #ff8a00);
+  color: #000; border-bottom: 2px solid #cc7700; font-weight: 900; font-size: 14px;
 }
+.banner[hidden]{ display:none }
 
-.card:hover::before {
-  opacity: 1;
+/* ---------- Animations ---------- */
+@keyframes fadeInUp{ from{opacity:0; transform: translateY(24px) scale(.98)} to{opacity:1; transform: translateY(0) scale(1)} }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px){
+  .grid{ grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 16px }
+  .wrap{ padding: 14px 16px }
 }
-
-.thumb {
-  position: relative;
-  aspect-ratio: 16/9;
-  overflow: hidden;
-  background: var(--carbon);
+@media (max-width: 768px){
+  .controls{ flex-direction: column; align-items: stretch }
+  .control.search{ min-width: 0 }
+  .grid{ grid-template-columns: 1fr }
 }
-
-.thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  filter: contrast(1.15) saturate(1.1) brightness(1.05);
-  transition: transform 0.4s ease;
-}
-
-.card:hover .thumb img {
-  transform: scale(1.1);
-}
-
-.thumb::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  pointer-events: none;
-}
-
-.thumb .tag {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  font-size: 11px;
-  font-weight: 900;
-  padding: 6px 10px;
-  border-radius: 12px;
-  background: rgba(0, 255, 136, 0.9);
-  color: #000;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.thumb .cc {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 6px 10px;
-  border-radius: 12px;
-  background: rgba(255, 51, 102, 0.9);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-.body {
-  padding: 18px;
-  flex: 1;
-}
-
-.title {
-  font-weight: 900;
-  line-height: 1.3;
-  margin: 0 0 12px;
-  font-size: 16px;
-}
-
-.title a {
-  color: var(--text);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.title a:hover {
-  color: var(--accent);
-}
-
-.meta {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.pill {
-  font-size: 10px;
-  font-weight: 800;
-  padding: 4px 8px;
-  border-radius: 12px;
-  background: var(--chip);
-  border: 1px solid var(--chip-b);
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-
-.specs {
-  margin: 0;
-  padding-left: 18px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.specs li {
-  margin: 3px 0;
-  position: relative;
-}
-
-.specs li::marker {
-  content: '🏍️ ';
-}
-
-.actions {
-  margin-top: auto;
-  padding: 16px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 2px solid var(--border);
-  background: linear-gradient(135deg, #0f1419, #1a1f2e);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 2px solid var(--accent);
-  background: linear-gradient(135deg, transparent, rgba(0, 255, 136, 0.1));
-  color: var(--accent);
-  padding: 10px 16px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.btn:hover {
-  background: var(--accent);
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
-}
-
-.yt {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent-2);
-  font-weight: 700;
-}
-
-.yt svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--accent-2);
-}
-
-footer {
-  border-top: 2px solid var(--border);
-  color: var(--muted);
-  font-size: 13px;
-  background: linear-gradient(135deg, #0a0d14, #1a1f2e);
-  padding: 20px 0;
-}
-
-.foot {
-  text-align: center;
-  line-height: 1.6;
-}
-
-.empty {
-  padding: 40px;
-  text-align: center;
-  color: var(--muted);
-  border: 2px dashed var(--border);
-  border-radius: 20px;
-  background: rgba(26, 31, 46, 0.3);
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.banner {
-  display: none;
-  padding: 12px 16px;
-  text-align: center;
-  background: linear-gradient(135deg, #ffcc00, #ff9900);
-  color: #000;
-  border-bottom: 2px solid #cc7700;
-  font-weight: 800;
-}
-
-.banner[hidden] {
-  display: none;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  
-  .control.search {
-    min-width: auto;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .wrap {
-    padding: 12px 16px;
-  }
-  
-  .brand-title {
-    font-size: 18px;
-  }
-  
-  .card {
-    border-radius: 16px;
-  }
-}
-
-/* Animasyonlar */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.card {
-  animation: fadeIn 0.6s ease forwards;
-}
-
-/* Racing çizgiler efekti */
-.card:nth-child(odd)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    var(--accent) 25%, 
-    var(--racing-yellow) 50%, 
-    var(--accent-2) 75%, 
-    transparent 100%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card:nth-child(odd):hover::after {
-  opacity: 1;
-}
-  </style>
-</head>
-<body>
-  <div id="banner" class="banner" hidden></div>
-  <header>
-    <div class="wrap row">
-      <div class="brand">
-        <img class="logo-img" src="./assets/prosofi-logo.png" alt="ProSofi" />
-        <div>
-          <div class="brand-sub">🏍️ YouTube Arşivi</div>
-          <div class="brand-title">ProSofi — İnceleme & Vlog</div>
-        </div>
-      </div>
-
-      <div class="controls grow" aria-label="Filtreler">
-        <label class="control search" title="Başlık / model adı içinde ara">
-          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 3a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm11 14.6-4.1-4.1-1.4 1.4 4.1 4.1a1 1 0 0 0 1.4-1.4z"/>
-          </svg>
-          <input id="search" type="search" placeholder="🔍 Ara: 'R1', 'Ninja', 'CBR'..." autocomplete="off" />
-        </label>
-
-        <label class="control" title="Tür seç (tek filtre)">
-          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          <select id="typeFilter">
-            <optgroup label="📋 İçerik Türü">
-              <option value="all" selected>🎬 Tüm Videolar</option>
-              <option value="inceleme">🔍 Sadece İncelemeler</option>
-              <option value="vlog">📹
